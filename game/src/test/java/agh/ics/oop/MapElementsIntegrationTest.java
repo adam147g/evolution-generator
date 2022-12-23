@@ -12,7 +12,7 @@ public class MapElementsIntegrationTest {
                 {"0","0","0","0","1","2","1","2"},
                 {"4","0","0","6","0","0","6","7"}};
         List<List<Integer>> directions = new OptionsParser().parse2D(testArgs);
-        AbstractMap map = new RectangularMap(10, 10);
+        RectangularMap map = new RectangularMap(10, 10);
         Vector2d[] positions = {new Vector2d(2,2), new Vector2d(1,4)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
         engine.runParallel(1);

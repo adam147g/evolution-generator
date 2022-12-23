@@ -8,6 +8,7 @@ import static java.util.Map.entry;
 public class CONSTANTS {
     static int DEFAULT_GENOTYPE_SIZE = 8;
     static int ENERGY_FROM_PLANT = 50;
+    static int ENERGY_LOSS_PER_MOVE = -10;
     // mapped genome with its corresponding map direction
     static Map<Integer,MapDirection> DIRECTIONS = Map.ofEntries(
             entry(0, MapDirection.NORTH),

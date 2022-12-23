@@ -9,19 +9,20 @@ public class RectangularMap extends AbstractMap  {
         this.maxRangeY = height;
     }
 
-    public boolean spawnPlantRandomly() {
-        int randomX = (int) (Math.random() * maxRangeX);
-        int randomY = (int) (Math.random() * maxRangeY);
-        Vector2d randomPosition = new Vector2d(randomX, randomY);
-        return spawnPlantAt(randomPosition);
+    public void spawnPlantRandomly() {
+        Vector2d randomPosition = new Vector2d(-1, -1);
+        while (isOccupied(randomPosition) || !this.canMoveTo(randomPosition)) {
+            int randomX = (int) (Math.random() * maxRangeX);
+            int randomY = (int) (Math.random() * maxRangeY);
+            randomPosition = new Vector2d(randomX, randomY);
+        }
+        spawnPlantAt(randomPosition);
     }
-    public boolean spawnPlantAt(Vector2d position) {
+    public void spawnPlantAt(Vector2d position) {
         if (!isOccupied(position)) {
             Plant plantToAdd = new Plant(position);
-            mapElements.put(plantToAdd.getPosition(), plantToAdd);
-            return true;
+            this.place(plantToAdd);
         }
-        return false;
     }
 
 }

@@ -8,7 +8,7 @@
 [x] - energy
 [ ] - death (observer simulation)
 [x] - genotype inheritance  
-[ ] - plant generating
+[x] - plant generating
 [ ] - simulation config
 [ ] - breeding
 [ ] - javaFX
@@ -16,4 +16,13 @@
 [ ] - exporting each day stats to csv
 [ ] - animal tracking
 
+
+//            case NORTH -> "↑";
+//            case NORTH_EAST -> "↗";
+//            case EAST -> "→";
+//            case SOUTH_EAST -> "↘";
+//            case SOUTH -> "↓";
+//            case SOUTH_WEST -> "↙";
+//            case WEST -> "←";
+//            case NORTH_WEST -> "↖";
 

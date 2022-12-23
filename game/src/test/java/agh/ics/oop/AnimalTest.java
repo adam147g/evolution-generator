@@ -21,4 +21,17 @@ public class AnimalTest {
         inheritance.inheritGenotype(animal1, animal2);
 
     }
+
+    @Test
+    void eatingTest() {
+        RectangularMap map = new RectangularMap(5,5) {
+        };
+        String[] genotype1 = {"0", "1", "2", "3", "4", "5", "6", "7"};
+        Animal animal1 = new Animal(map, new Vector2d(0,0), new OptionsParser().parse1D(genotype1));
+        map.spawnPlantAt(new Vector2d(1,1));
+        System.out.println(animal1.getEnergy());
+        animal1.move(1);
+        System.out.println(animal1.getEnergy());
+
+    }
 }
