@@ -1,14 +1,19 @@
 package agh.ics.oop;
 
 
+import agh.ics.oop.gui.IObserver;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationEngine {
+public class SimulationEngine implements IEngine, Runnable {
     public final List<Animal> animals;
     public final List<Plant> plants;
+    private int plantsPerDay = 5;
     private final CONFIG config;
-    private RectangularMap map;
+    public RectangularMap map;
+    private int moveDelay = 0;
+    private List<IObserver> observers = new ArrayList<>();
 //    public SimulationEngine(CONFIG config) {
 //        this.config = config;
 //        this.map = map;
@@ -43,6 +48,12 @@ public class SimulationEngine {
             if (this.map.place(animalToAdd))
                 animals.add(animalToAdd);
         }
+    }
+    public void setMoveDelay(int moveDelay) {
+        this.moveDelay = moveDelay;
+    }
+    public void addObserver(IObserver app) {
+        this.observers.add(app);
     }
     // for each animal runs sequentially its movement set
     public void runSequentially() {
@@ -106,5 +117,27 @@ public class SimulationEngine {
         }
         System.out.println("Number of plants: " + animals.size());
 
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            for (int i = 0; i < animals.size(); i++) {
+                Animal currentAnimal = animals.get(i);
+                if (currentAnimal.isAlive()) {
+                    int currentMove = currentAnimal.getGenotype().get(currentAnimal.getDayOfLife() % CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+                    currentAnimal.move(currentMove);
+                }
+            }
+            for (IObserver observer : observers) {
+                observer.elementMoved();
+            }
+            try {
+                System.out.println("Sleeping..");
+                Thread.sleep(this.moveDelay);
+            } catch (InterruptedException ex) {
+                System.out.println("Interrupted -> " + ex);
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@
 [ ] - simulation config
 [ ] - breeding
 [ ] - javaFX
+[ ] - textures (health status, plant, map, jungle, map)
 [ ] - observers for stats
 [ ] - exporting each day stats to csv
 [ ] - animal tracking

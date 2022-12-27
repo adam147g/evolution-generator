@@ -3,6 +3,8 @@ package agh.ics.oop;
 public class RectangularMap extends AbstractMap  {
     int maxRangeX;
     int maxRangeY;
+    int jungleWidth;
+    int jungleHeight;
     public RectangularMap(int width, int height) {
         super(0, 0, width - 1, height - 1);
         this.maxRangeX = width;

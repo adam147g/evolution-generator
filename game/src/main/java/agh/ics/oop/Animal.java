@@ -8,7 +8,7 @@ public class Animal extends AbstractMapElement{
     // random direction after generating
 //    private MapDirection direction = CONSTANTS.DIRECTIONS.get((int) Math.round(Math.random() * (CONSTANTS.DEFAULT_GENOTYPE_SIZE - 1)));
     private int energy = 200;
-    private int dayOfLife = 1;
+    private int dayOfLife = 0;
     private int descendants = 0;
     private int plantsEaten = 0;
     private int currentGenome = 0;
@@ -44,6 +44,10 @@ public class Animal extends AbstractMapElement{
     }
     public int getEnergy() {
         return energy;
+    }
+
+    public int getDayOfLife() {
+        return dayOfLife;
     }
 
     public boolean isAlive() {
@@ -104,5 +108,10 @@ public class Animal extends AbstractMapElement{
             case WEST -> "west.png";
             case NORTH_WEST -> "north_west.png";
         };
+        /*
+        if this.energy == 100% -> healthy.png
+        if this.energy == 50% -> ill.png
+        if this.energy == 10% -> dying.png
+        */
     }
 }

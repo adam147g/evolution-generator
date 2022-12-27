@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract public class AbstractMap implements IMap, IPositionChangeObserver {
-    protected Map<Vector2d, Object> mapElements = new HashMap<>();
+    protected Map<Vector2d, AbstractMapElement> mapElements = new HashMap<>();
     protected Vector2d leftBottomCorner;
     protected Vector2d rightTopCorner;
     public Vector2d getLeftBottomCorner() {
@@ -16,6 +16,9 @@ abstract public class AbstractMap implements IMap, IPositionChangeObserver {
     public AbstractMap(int xLB, int yLB, int xRT, int yRT) {
         this.leftBottomCorner = new Vector2d(xLB, yLB);
         this.rightTopCorner = new Vector2d(xRT, yRT);
+    }
+    public Map<Vector2d, AbstractMapElement> getMapElements() {
+        return mapElements;
     }
     public String toString() {
         return new MapVisualizer(this).draw(getLeftBottomCorner(), getRightTopCorner());
@@ -39,7 +42,7 @@ abstract public class AbstractMap implements IMap, IPositionChangeObserver {
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        Object elementToChange = this.mapElements.get(oldPosition);
+        AbstractMapElement elementToChange = this.mapElements.get(oldPosition);
         this.mapElements.remove(oldPosition);
         this.mapElements.put(newPosition, elementToChange);
     }
