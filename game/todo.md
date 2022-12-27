@@ -18,12 +18,5 @@
 [ ] - animal tracking
 
 
-//            case NORTH -> "↑";
-//            case NORTH_EAST -> "↗";
-//            case EAST -> "→";
-//            case SOUTH_EAST -> "↘";
-//            case SOUTH -> "↓";
-//            case SOUTH_WEST -> "↙";
-//            case WEST -> "←";
-//            case NORTH_WEST -> "↖";
+
 
