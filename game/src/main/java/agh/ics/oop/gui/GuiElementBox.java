@@ -15,8 +15,10 @@ import java.io.FileNotFoundException;
 public class GuiElementBox {
     Image elementImage;
     AbstractMapElement mapElement;
+    int boxSize;
 
-    public GuiElementBox(AbstractMapElement mapElement) throws FileNotFoundException {
+    public GuiElementBox(AbstractMapElement mapElement, int boxSize) throws FileNotFoundException {
+        this.boxSize = boxSize;
         this.mapElement = mapElement;
         String URL = "src/main/resources/" + mapElement.getImageName();
         try {
@@ -24,23 +26,25 @@ public class GuiElementBox {
         } catch (FileNotFoundException ex) {
             System.out.println("Files not found -> " + ex);
         }
-
     }
 
-    public VBox mapElementVbox() {
-        Label mapElementLabel;
+    public GuiElementBox(boolean jungle, int boxSize) throws FileNotFoundException {
+        this.boxSize = boxSize;
+        String URL = "src/main/resources/" + ((jungle) ? "jungle.png" : "grass.png");
+        try {
+            this.elementImage = new Image(new FileInputStream(URL));
+        } catch (FileNotFoundException ex) {
+            System.out.println("Files not found -> " + ex);
+        }
+    }
+
+    public VBox mapElementVbox(double scale) {
         ImageView mapElementImage = new ImageView(elementImage);
-        if (mapElement instanceof Animal) {
-            mapElementLabel = new Label("Animal " + mapElement.getPosition());
-        }
-        else {
-            mapElementLabel = new Label("Plant");
-        }
-        mapElementImage.setFitWidth(20);
-        mapElementImage.setFitHeight(20);
+        mapElementImage.setFitWidth(boxSize * scale);
+        mapElementImage.setFitHeight(boxSize * scale);
 //        mapElementLabel.setFont(new Font(10));
         VBox elementVBox = new VBox();
-        elementVBox.getChildren().addAll(mapElementImage, mapElementLabel);
+        elementVBox.getChildren().addAll(mapElementImage);
         elementVBox.setAlignment(Pos.CENTER);
 
         return elementVBox;

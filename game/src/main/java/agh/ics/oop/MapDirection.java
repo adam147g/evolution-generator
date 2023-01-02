@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import java.util.Random;
+
 public enum MapDirection {
     NORTH,
     NORTH_EAST,
@@ -9,17 +11,19 @@ public enum MapDirection {
     SOUTH_WEST,
     WEST,
     NORTH_WEST;
-
+    public static MapDirection randomDirection() {
+        return CONSTANTS.DIRECTIONS.get(new Random().nextInt(CONSTANTS.DEFAULT_GENOTYPE_SIZE));
+    }
     public String toString() {
         return switch(this) {
-            case NORTH -> "Północ";
-            case NORTH_EAST -> "Północny-Wschód";
-            case EAST -> "Wschód";
-            case SOUTH_EAST -> "Południowy-Wschód";
-            case SOUTH -> "Południe";
-            case SOUTH_WEST -> "Południowy-Zachód";
-            case WEST -> "Zachód";
-            case NORTH_WEST -> "Północny-Zachód";
+            case NORTH -> "North";
+            case NORTH_EAST -> "North-East";
+            case EAST -> "East";
+            case SOUTH_EAST -> "South-East";
+            case SOUTH -> "South";
+            case SOUTH_WEST -> "South-West";
+            case WEST -> "West";
+            case NORTH_WEST -> "North-West";
 
         };
     }

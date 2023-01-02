@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import java.util.Map;
+
 /**
  * The map visualizer converts the {@link IMap} map into a string
  * representation.
@@ -72,7 +74,9 @@ public class MapVisualizer {
     private String drawObject(Vector2d currentPosition) {
         String result = null;
         if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
+            Map<Integer, Animal> elementsOnPosition = this.map.objectsAt(currentPosition);
+            // there can be more than one object at one position, but visualizer prints only one of them
+            Object object = elementsOnPosition.values().toArray()[0];
             if (object != null) {
                 result = object.toString();
             } else {

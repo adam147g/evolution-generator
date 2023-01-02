@@ -3,13 +3,36 @@ package agh.ics.oop;
 import java.util.Objects;
 
 public class Vector2d {
-    public final int x;
-    public final int y;
+    public int x;
+    public int y;
     public Vector2d(int x, int y){
         this.x = x;
         this.y = y;
     }
 
+
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
+    public void set(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    public void randomizeOnMap(AbstractMap map){
+        int randomXOfMap = this.x;
+        int randomYOfMap = this.y;
+        while (this.x == randomXOfMap) {
+            randomXOfMap = map.leftBottomCorner.x + (int)(Math.random() * ((map.rightTopCorner.x - map.leftBottomCorner.x) + 1));
+        }
+        while (this.y == randomYOfMap) {
+            randomYOfMap = map.leftBottomCorner.y + (int)(Math.random() * ((map.rightTopCorner.y - map.leftBottomCorner.y) + 1));
+        }
+        this.x = randomXOfMap;
+        this.y = randomYOfMap;
+    }
     public String toString(){
         return "(" + String.valueOf(this.x) + "," + String.valueOf(this.y) + ")";
     }
@@ -17,6 +40,7 @@ public class Vector2d {
         return (this.x <= other.x && this.y <= other.y);
     }
     public boolean follows(Vector2d other){ return (this.x >= other.x && this.y >= other.y); }
+    public boolean includesIn(Vector2d leftBottomCorner, Vector2d rightTopCorner){ return (this.precedes(rightTopCorner) && this.follows(leftBottomCorner)); }
     public Vector2d upperRight(Vector2d other){
         return new Vector2d(Math.max(this.x, other.x), Math.max(this.y, other.y));
     }

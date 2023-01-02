@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="agh.ics.oop.AnimalTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-01-02T20:47:03" hostname="DESKTOP-EIU3P5L" time="0.106">
+  <properties/>
+  <testcase name="breedTest()" classname="agh.ics.oop.AnimalTest" time="0.106"/>
+  <system-out><![CDATA[this animal has id: 0
+this animal has id: 1
+this animal has id: 2
+this animal has id: 3
+
+meeting
+[{0=0, 1=1, 2=2, 3=3}]
+animal1 energy: 200
+animal2 energy: 100
+animal3 energy: 100
+animal4 energy: 300
+
+winners
+
+BREED BEGINS
+parent 1 id: 3 parent 2 id: 0
+this animal has id: 4
+New animals has been born
+
+animal1 descendants: 1
+animal2 descendants: 0
+animal3 descendants: 0
+animal4 descendants: 1
+[{0=0, 1=1, 2=2, 3=3, 4=4}]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
