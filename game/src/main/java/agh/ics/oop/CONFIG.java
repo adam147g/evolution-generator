@@ -35,12 +35,15 @@ public class CONFIG {
     public int energyLossForBreed = -40;
     //
     public int minMutationNumber = 0;
+    //
     public int maxMutationNumber = 0;
+    //
     /**
      * mutationVariant = 0 - full randomness - mutation changes genome to random one;
      * mutationVariant = 1 - slight correction - mutation changes genome one up or one down (e.g. genome 3 can be changed into 2 or 4 and genome 0 - into 1 or 7).
      */
     public int mutationVariant = 0;
+    //
     public int genotypeSize = 8;
     /**
      * animalBehaviour = 0 - full predestination - animal perform genome sequentially, one after the other;

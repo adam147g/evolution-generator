@@ -41,7 +41,7 @@ public class SimulationActions {
     }
     private void chooseNextGenome(Animal currentAnimal) {
         if (this.engine.map.config.animalBehaviour == 0) {
-            currentAnimal.setCurrentGenomeIndex((currentAnimal.getCurrentGenomeIndex() + 1) % CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+            currentAnimal.setCurrentGenomeIndex((currentAnimal.getCurrentGenomeIndex() + 1) % this.engine.map.config.genotypeSize);
         } else if (this.engine.map.config.animalBehaviour == 1) {
             animalDifferentBehaviour(currentAnimal);
         }
@@ -51,9 +51,9 @@ public class SimulationActions {
         // 80% chance of taking next genome / 20% chance of drawing random genome
         int decide = new Random().nextInt(10);
         if (decide < 2) {
-            currentAnimal.setCurrentGenomeIndex(new Random().nextInt(CONSTANTS.DEFAULT_GENOTYPE_SIZE));
+            currentAnimal.setCurrentGenomeIndex(new Random().nextInt(this.engine.map.config.genotypeSize));
         } else {
-            currentAnimal.setCurrentGenomeIndex((currentAnimal.getCurrentGenomeIndex() + 1) % CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+            currentAnimal.setCurrentGenomeIndex((currentAnimal.getCurrentGenomeIndex() + 1) % this.engine.map.config.genotypeSize);
         }
     }
 
@@ -110,7 +110,7 @@ public class SimulationActions {
             while (this.engine.map.isOccupied(randomPosition) || !this.engine.map.canMoveTo(randomPosition)) {
                 randomPosition.randomizeOnMap(this.engine.map);
             }
-            ArrayList<Integer> randomGenotype = new Inheritance().getRandomGenotype(CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+            ArrayList<Integer> randomGenotype = new Inheritance(this.engine.map.config).getRandomGenotype(this.engine.map.config.genotypeSize);
             Animal animalToAdd = new Animal(this.engine.map, randomPosition, randomGenotype);
             if (this.engine.map.place(animalToAdd))
                 this.engine.animals.add(animalToAdd);

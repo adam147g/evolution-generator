@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class Animal extends AbstractMapElement{
     // random direction after generating
-    private MapDirection direction = MapDirection.randomDirection();
-    public int energy = CONSTANTS.DEFAULT_START_ENERGY;
+    private MapDirection direction = MapDirection.randomDirection(this.map.config);
+    public int energy;
     public int age = 0;
     public int descendantsNumber = 0;
     private int plantsEaten = 0;
@@ -16,23 +16,23 @@ public class Animal extends AbstractMapElement{
     private ArrayList<Integer> genotype;
     public Animal (AbstractMap map, Vector2d initialPosition, ArrayList<Integer> initialGenotype){
         super(initialPosition, map);
-//        this.energy = this.map.config.initialEnergy;
+        this.energy = map.config.initialEnergy;
         this.genotype = initialGenotype;
     }
     public Animal (AbstractMap map, Vector2d initialPosition){
         super(initialPosition, map);
-//        this.energy = this.map.config.initialEnergy;
+        this.energy = map.config.initialEnergy;
     }
     // BREEDING CONSTRUCTOR
     public Animal (AbstractMap map, Vector2d initialPosition, Animal parent1, Animal parent2){
         super(initialPosition, map);
 
-        Inheritance inheritance = new Inheritance();
+        Inheritance inheritance = new Inheritance(this.map.config);
         this.genotype = inheritance.inheritGenotype(parent1, parent2);
         this.energy = this.map.config.energyLossForBreed * 2 * (-1);
     }
     public int randomGenomeIndex() {
-        return new Random().nextInt(CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+        return new Random().nextInt(this.map.config.genotypeSize);
     }
     public String toString() {
 //        return switch (this.direction) {
@@ -171,7 +171,7 @@ public class Animal extends AbstractMapElement{
 //            case WEST -> "west.png";
 //            case NORTH_WEST -> "north_west.png";
 //        };
-        float life = (float) this.energy/CONSTANTS.DEFAULT_MAX_ENERGY;
+        float life = (float) this.energy/this.map.config.initialEnergy;
 //        System.out.println("hp status: max: " + CONSTANTS.DEFAULT_MAX_ENERGY + " curr: " + this.energy + " percent: " + life);
         if (life <= 0) {
             return "animal0.png";

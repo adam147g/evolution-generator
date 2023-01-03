@@ -126,7 +126,6 @@ public class SimulationEngine implements IEngine, Runnable {
         }
     }
     public void stats() {
-
         System.out.println(map);
         System.out.println("STATISTICS");
         System.out.println("Number of all animals: " + animals.size());
@@ -150,14 +149,56 @@ public class SimulationEngine implements IEngine, Runnable {
 //        }
     }
 
+    public ArrayList<Integer> getBestGenotype(){
+        int bestIndex = 0;
+        int maxDescendant = 0;
+        for (int i = 0; i < animals.size(); i++) {
+            if (animals.get(i).getDescendantsNumber() > maxDescendant) {
+                maxDescendant = animals.get(i).getDescendantsNumber();
+                bestIndex = i;
+            }
+        }
+        return animals.get(bestIndex).getGenotype();
+    }
+
+    public String getAvgEnergyAmongAliveAnimals(){
+        int aliveAnimalTotalEnergy = 0;
+        int aliveAnimalNumber = 0;
+        for (Animal animal : animals) {
+            if (animal.isAlive()) {
+                aliveAnimalTotalEnergy += animal.getEnergy();
+                aliveAnimalNumber += 1;
+            }
+        }
+        if (aliveAnimalNumber == 0) {
+            return "no live animals";
+        }
+        return Integer.toString(aliveAnimalTotalEnergy / aliveAnimalNumber);
+    }
+
+    public String getAvgAgeAmongDeadAnimals(){
+        int deadAnimalsTotalAge = 0;
+        int deadAnimalNumber = 0;
+        for (Animal animal : animals) {
+            if (animal.isDead()) {
+                deadAnimalsTotalAge += animal.getAge();
+                deadAnimalNumber += 1;
+            }
+        }
+        if (deadAnimalNumber == 0) {
+            return "no dead animals";
+        }
+        return Integer.toString(deadAnimalsTotalAge / deadAnimalNumber);
+    }
+
     @Override
     public void run() {
         int k = 0;
         int days = 15;
         while (!this.map.animalElementsMap.isEmpty()){
-            System.out.println();
-            System.out.println(k + " day");
-            stats();
+//            System.out.println();
+//            System.out.println(k + " day");
+//            stats();
             actions.cleanDeadAnimals();
             actions.moveAnimals();
             actions.eatPlants();

@@ -11,8 +11,8 @@ public enum MapDirection {
     SOUTH_WEST,
     WEST,
     NORTH_WEST;
-    public static MapDirection randomDirection() {
-        return CONSTANTS.DIRECTIONS.get(new Random().nextInt(CONSTANTS.DEFAULT_GENOTYPE_SIZE));
+    public static MapDirection randomDirection(CONFIG config) {
+        return CONSTANTS.DIRECTIONS.get(new Random().nextInt(config.genotypeSize));
     }
     public String toString() {
         return switch(this) {

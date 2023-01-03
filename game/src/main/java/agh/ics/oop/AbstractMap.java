@@ -46,7 +46,7 @@ abstract public class AbstractMap implements IMap, IPositionChangeObserver {
     public boolean place(Animal elementToAdd) {
         // initialize id of map element
         elementToAdd.setId(this.globalIndexElements + 1);
-        System.out.println("this animal has id: " + elementToAdd.id);
+//        System.out.println("this animal has id: " + elementToAdd.id);
         increaseGlobalIndexElements();
 
         Vector2d currentPosition = elementToAdd.getPosition();

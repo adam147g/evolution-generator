@@ -6,6 +6,10 @@ import java.util.Random;
 
 
 public class Inheritance {
+    CONFIG config;
+    public Inheritance(CONFIG config) {
+        this.config = config;
+    }
     public ArrayList<Integer> inheritGenotype(Animal animal1, Animal animal2) {
         int animalEnergy1 = animal1.getEnergy();
         int animalEnergy2 = animal2.getEnergy();
@@ -21,7 +25,7 @@ public class Inheritance {
             energyRatio = 1 - energyRatio;
         }
         System.out.println("energyRatio: " + energyRatio);
-        int inheritanceIndex = (int) (energyRatio * CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+        int inheritanceIndex = (int) (energyRatio * this.config.genotypeSize);
         System.out.println("inheritanceIndex: " + inheritanceIndex);
 
         // create new genotype with drawn side
@@ -51,9 +55,9 @@ public class Inheritance {
             ArrayList<Integer> temp = genotype1;
             genotype1 = genotype2;
             genotype2 = temp;
-            index = CONSTANTS.DEFAULT_GENOTYPE_SIZE - index;
+            index = this.config.genotypeSize - index;
         }
-        for (int i = 0; i < CONSTANTS.DEFAULT_GENOTYPE_SIZE; i++) {
+        for (int i = 0; i < this.config.genotypeSize; i++) {
             if (i < index) {
                 genotypeToCreate.add(genotype1.get(i));
             } else {
@@ -74,31 +78,34 @@ public class Inheritance {
 
     private void mutateVariant(ArrayList<Integer> genotype) {
         // random number of mutated genomes
-        int numberOfMutatedGenomes = (int) Math.round(Math.random() * (CONSTANTS.DEFAULT_GENOTYPE_SIZE - 1));
+        int numberOfMutatedGenomes = Math.min((new Random().nextInt((this.config.maxMutationNumber - this.config.minMutationNumber) + 1) + this.config.minMutationNumber), this.config.genotypeSize);
+        if (numberOfMutatedGenomes == 0) {
+            return;
+        }
         System.out.println("number of mutated genomes: " + numberOfMutatedGenomes);
 
         // random chosen mutated genomes
-        ArrayList<Integer> randomDrawnGenomes = getRandomGenotype(CONSTANTS.DEFAULT_GENOTYPE_SIZE);
+        ArrayList<Integer> randomDrawnGenomes = getRandomGenotype(this.config.genotypeSize);
         System.out.println("randomized genomes: " + randomDrawnGenomes);
 
         // mutating to random genome or change by one (up or down)
         for (int i = 0; i < numberOfMutatedGenomes; i++) {
             int currentGenomeIndex = randomDrawnGenomes.get(i);
             int newGenome = -1;
-            if (CONSTANTS.MUTATION_VARIANT == 0) {
-                int randomGenome = (int) Math.round(Math.random() * (CONSTANTS.DEFAULT_GENOTYPE_SIZE - 1));
+            if (this.config.mutationVariant == 0) {
+                int randomGenome = (int) Math.round(Math.random() * (this.config.genotypeSize - 1));
                 // try to draw a value different from before
                 while (randomGenome == genotype.get(currentGenomeIndex)) {
-                    randomGenome = (int) Math.round(Math.random() * (CONSTANTS.DEFAULT_GENOTYPE_SIZE - 1));
+                    randomGenome = (int) Math.round(Math.random() * (this.config.genotypeSize - 1));
                 }
                 newGenome = randomGenome;
-            } else if (CONSTANTS.MUTATION_VARIANT == 1) {
+            } else if (this.config.mutationVariant == 1) {
                 // decide: 0 - go down / 1 - go up
                 int decide = new Random().nextInt(2);
                 if (decide == 0) {
-                    newGenome = (CONSTANTS.DEFAULT_GENOTYPE_SIZE + genotype.get(currentGenomeIndex) - 1) % CONSTANTS.DEFAULT_GENOTYPE_SIZE;
+                    newGenome = (this.config.genotypeSize + genotype.get(currentGenomeIndex) - 1) % this.config.genotypeSize;
                 } else {
-                    newGenome = (CONSTANTS.DEFAULT_GENOTYPE_SIZE + genotype.get(currentGenomeIndex) - 1) % CONSTANTS.DEFAULT_GENOTYPE_SIZE;
+                    newGenome = (this.config.genotypeSize + genotype.get(currentGenomeIndex) - 1) % this.config.genotypeSize;
                 }
             }
             System.out.println("change from " + genotype.get(currentGenomeIndex) + " to " + newGenome + " at index: " + currentGenomeIndex + " - VARIANT 0");

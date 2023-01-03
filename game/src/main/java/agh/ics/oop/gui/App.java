@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -19,20 +20,24 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class App extends Application implements IObserver{
     private SimulationEngine engine;
     private RectangularMap map;
     private GridPane grid;
-
+    private VBox statsBox;
+    private VBox singleStatsBox;
+    private HBox simulationWindow;
     private Stage stage;
 
     int default_width = 1600;
     int default_height = 800;
-    private final VBox finalVBox = new VBox();
-    
+
+
 //    public void init() {
 //        this.map = new RectangularMap(20,10, 0.2) {
 //        };
@@ -49,7 +54,7 @@ public class App extends Application implements IObserver{
         grid.setGridLinesVisible(false);
         grid.setGridLinesVisible(true);
 
-        int boxSize = (int) (default_height - 200) / this.engine.map.maxRangeY;
+        int boxSize = Math.min((int) ((default_height - 200) / this.engine.map.maxRangeY), (int) ((((2 * default_width) - 50 /3) / this.engine.map.maxRangeX))) ;
 
 
         for (int i = 0; i < map.getRightTopCorner().y - map.getLeftBottomCorner().y + 1; i++) {
@@ -107,32 +112,108 @@ public class App extends Application implements IObserver{
         }
     }
 
-    public void showStats() {
+    public void showStats(boolean initial) {
+
+        Label label = new Label("Statistics");
+        label.setStyle("-fx-font-weight: bold");
+
+        HBox animalNumberBox = new HBox();
+        Label animalNumberLabel = new Label("Animal number: ");
+        animalNumberBox.getChildren().addAll(animalNumberLabel);
+        animalNumberBox.setAlignment(Pos.BASELINE_LEFT);
+
+        HBox plantNumberBox = new HBox();
+        Label plantNumberLabel = new Label("Plant number: ");
+        plantNumberBox.getChildren().addAll(plantNumberLabel);
+        plantNumberBox.setAlignment(Pos.BASELINE_LEFT);
+
+        HBox freeSpacesNumberBox = new HBox();
+        Label freeSpacesNumberLabel = new Label("Free spaces: ");
+        freeSpacesNumberBox.getChildren().addAll(freeSpacesNumberLabel);
+        freeSpacesNumberBox.setAlignment(Pos.BASELINE_LEFT);
+
+        HBox mostPopularGenotypeBox = new HBox();
+        Label mostPopularGenotypeLabel = new Label("Most popular genotype: ");
+        mostPopularGenotypeBox.getChildren().addAll(mostPopularGenotypeLabel);
+        mostPopularGenotypeBox.setAlignment(Pos.BASELINE_LEFT);
+
+        HBox averageEnergyAmongAliveAnimalsBox = new HBox();
+        Label averageEnergyAmongAliveAnimalsLabel = new Label("Average energy among alive animals: ");
+        averageEnergyAmongAliveAnimalsBox.getChildren().addAll(averageEnergyAmongAliveAnimalsLabel);
+        averageEnergyAmongAliveAnimalsBox.setAlignment(Pos.BASELINE_LEFT);
+
+        HBox averageAgeAmongDeadAnimalsBox = new HBox();
+        Label averageAgeAmongDeadAnimalsLabel = new Label("Average age among dead animals: ");
+        averageAgeAmongDeadAnimalsBox.getChildren().addAll(averageAgeAmongDeadAnimalsLabel);
+        averageAgeAmongDeadAnimalsBox.setAlignment(Pos.BASELINE_LEFT);
+
+        statsBox.setAlignment(Pos.CENTER);
+        statsBox.setStyle("-fx-padding: 26;");
+        statsBox.setSpacing(10);
+        statsBox.getChildren().addAll(label, animalNumberBox,
+                plantNumberBox,
+                freeSpacesNumberBox,
+                mostPopularGenotypeBox,
+                averageEnergyAmongAliveAnimalsBox,
+                averageAgeAmongDeadAnimalsBox);
+        if (!initial) {
+            int animalNumberValue = engine.animals.size() - map.deathCount;
+            Label animalNumberLabelVal = new Label(Integer.toString(animalNumberValue));
+            animalNumberBox.getChildren().add(animalNumberLabelVal);
+
+            int plantNumberValue = map.getPlantElementsMap().size();
+            Label plantNumberLabelVal = new Label(Integer.toString(plantNumberValue));
+            plantNumberBox.getChildren().add(plantNumberLabelVal);
+
+            Set<Vector2d> takenPlaces = new HashSet<Vector2d>(map.getAnimalElementsMap().keySet());
+            takenPlaces.addAll(map.getPlantElementsMap().keySet());
+            int freeSpacesNumberValue = (map.maxRangeY * map.maxRangeX) - takenPlaces.size();
+            Label freeSpacesNumberLabelVal = new Label(Integer.toString(freeSpacesNumberValue));
+            Label freeSpacesNumberLabelVal2 = new Label(" out of " + (map.maxRangeY * map.maxRangeX));
+            freeSpacesNumberBox.getChildren().addAll(freeSpacesNumberLabelVal, freeSpacesNumberLabelVal2);
+
+            Label mostPopularGenotypeLabelVal = new Label(engine.getBestGenotype().toString());
+            mostPopularGenotypeBox.getChildren().add(mostPopularGenotypeLabelVal);
+
+            Label averageEnergyAmongAliveAnimalsLabelVal = new Label(engine.getAvgEnergyAmongAliveAnimals());
+            averageEnergyAmongAliveAnimalsBox.getChildren().add(averageEnergyAmongAliveAnimalsLabelVal);
+
+            Label averageAgeAmongDeadAnimalsLabelVal = new Label(engine.getAvgAgeAmongDeadAnimals());
+            averageAgeAmongDeadAnimalsBox.getChildren().add(averageAgeAmongDeadAnimalsLabelVal);
+
+        }
+
 
     }
 
-    public void start1(Stage primaryStage) {
-//        TextField movesInput = new TextField();
-        Button startButton = new Button("Run");
-//        VBox inputBox = new VBox(movesInput, startButton);
-        VBox inputBox = new VBox(startButton);
-        VBox appBox = new VBox(this.grid, inputBox);
-        grid.setAlignment(Pos.CENTER);
-        inputBox.setAlignment(Pos.CENTER);
-        appBox.setAlignment(Pos.CENTER);
-//        movesInput.setMaxWidth(100);
 
-        startButton.setOnAction(ev -> {
-            Thread engineThread = new Thread(engine);
-            engineThread.start();
-        });
 
-        drawMap(true);
-        Scene scene = new Scene(appBox, default_width, default_height);
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
-    }
+
+
+//
+//    public void start1(Stage primaryStage) {
+////        TextField movesInput = new TextField();
+//        Button startButton = new Button("Run");
+////        VBox inputBox = new VBox(movesInput, startButton);
+//        VBox inputBox = new VBox(startButton);
+//        VBox appBox = new VBox(this.grid, inputBox);
+//        grid.setAlignment(Pos.CENTER);
+//        inputBox.setAlignment(Pos.CENTER);
+//        appBox.setAlignment(Pos.CENTER);
+////        movesInput.setMaxWidth(100);
+//
+//        startButton.setOnAction(ev -> {
+//            Thread engineThread = new Thread(engine);
+//            engineThread.start();
+//        });
+//
+//        drawMap(true);
+//        Scene scene = new Scene(appBox, default_width, default_height);
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+//
+//    }
 
     public void start(Stage primaryStage) {
         stage = primaryStage;
@@ -282,14 +363,13 @@ public class App extends Application implements IObserver{
         vBox.setAlignment(Pos.CENTER);
         vBox.setStyle("-fx-padding: 26;");
         vBox.setSpacing(10);
-
-
         vBox.getChildren().addAll(label, mapWidthBox, mapHeightBox, mapVariantBox, initialPlantsNumberBox, eatingPlantEnergyBox, energyLossPerMoveBox, newPlantsPerDayBox, plantGrowthTypeBox, initialAnimalNumberBox, initialEnergyBox, readyForBreedEnergyBox, energyLossForBreedBox, minMutationNumberBox, maxMutationNumberBox, mutationVariantBox, genotypeSizeBox, animalBehaviourBox, button);
 
 
         Scene startScene = new Scene(vBox, 500, 700);
-        Scene scene = new Scene(finalVBox, default_width, default_height);
         button.setOnAction(e -> simulationScene(this.stage, mapWidthBox, mapHeightBox, mapVariantBox, initialPlantsNumberBox, eatingPlantEnergyBox, energyLossPerMoveBox, newPlantsPerDayBox, plantGrowthTypeBox, initialAnimalNumberBox, initialEnergyBox, readyForBreedEnergyBox, energyLossForBreedBox, minMutationNumberBox, maxMutationNumberBox, mutationVariantBox, genotypeSizeBox, animalBehaviourBox));
+
+        primaryStage.setTitle("Evolution Generator: Configuration");
         primaryStage.setScene(startScene);
         primaryStage.show();
 
@@ -316,33 +396,54 @@ public class App extends Application implements IObserver{
                 ((IntegerField) genotypeSizeBox.getChildren().get(1)).getValue(),
                 ((((ComboBox<String>) animalBehaviourBox.getChildren().get(1)).getValue() == "Full Predestination") ? 0 : 1)
         );
-        config.printConfig();
-
         this.engine = new SimulationEngine(config);
         this.engine.addObserver(this);
         this.engine.setMoveDelay(500);
+        this.statsBox = new VBox();
+        statsBox.setPrefHeight(default_height);
+        statsBox.setPrefWidth((int) (default_width/3));
         this.grid = new GridPane();
-        System.out.println();
-        this.engine.stats();
         this.map = this.engine.map;
 
-        TextField movesInput = new TextField();
+        Label label = new Label("Simulation");
+        label.setStyle("-fx-font-weight: bold");
         Button startButton = new Button("Run");
-        VBox inputBox = new VBox(startButton);
-        VBox appBox = new VBox(this.grid, inputBox);
-        grid.setAlignment(Pos.CENTER);
+        startButton.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #158a20;");
+        Button stopButton = new Button("Stop");
+        stopButton.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #ff0000;");
+
+        VBox inputBox = new VBox(startButton, stopButton);
+        inputBox.setSpacing(10);
         inputBox.setAlignment(Pos.CENTER);
-        appBox.setAlignment(Pos.CENTER);
+        VBox simulationBox = new VBox(label, this.grid, inputBox);
+        simulationBox.setPrefHeight(default_height);
+        simulationBox.setPrefWidth((int) (2*default_width/3));
+        simulationBox.setAlignment(Pos.CENTER);
+        simulationBox.setSpacing(10);
+
+        HBox appBox = new HBox(statsBox, simulationBox);
+        grid.setAlignment(Pos.CENTER);
+//        appBox.setAlignment(Pos.CENTER);
 
         startButton.setOnAction(ev -> {
             Thread engineThread = new Thread(engine);
+            stopButton.setOnAction(ev2 -> {
+                engineThread.interrupt();
+            });
             engineThread.start();
+
         });
 
+
+
         drawMap(true);
+        showStats(false);
         Scene scene = new Scene(appBox, default_width, default_height);
-        stage.setScene(scene);
-        stage.show();
+        Stage newStage = new Stage();
+
+        newStage.setTitle("Evolution Generator: Simulation");
+        newStage.setScene(scene);
+        newStage.show();
     }
 
     @Override
@@ -350,6 +451,10 @@ public class App extends Application implements IObserver{
         Platform.runLater(() -> {
             grid.getChildren().clear();
             drawMap(false);
+            statsBox.getChildren().clear();
+            showStats(false);
+
+
         });
     }
 }
